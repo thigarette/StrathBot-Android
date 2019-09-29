@@ -2,6 +2,7 @@
     <string name="app_name">StrathBot</string>
     <string name="title_activity_login">Log In</string>
     <string name="prompt_email">Email</string>
+    <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="action_log_in">Log in</string>
     <string name="action_sign_in">Sign in or register</string>
