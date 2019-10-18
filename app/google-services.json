@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "230946816010",
+    "firebase_url": "https://strathbot-254.firebaseio.com",
+    "project_id": "strathbot-254",
+    "storage_bucket": "strathbot-254.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230946816010:android:9c500d1528114d35961ff3",
+        "android_client_info": {
+          "package_name": "com.thiga.strathbot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "230946816010-abclo955iev4e3rv76flii77o393kmqu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvTERbLf7yYyDwyJ0fPyz54HFbPkfz5W4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "230946816010-abclo955iev4e3rv76flii77o393kmqu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
