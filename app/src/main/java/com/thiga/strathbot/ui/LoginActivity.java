@@ -23,6 +23,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.JsonObject;
 import com.thiga.strathbot.MainActivity;
 import com.thiga.strathbot.R;
 import com.thiga.strathbot.api.ApiService;
@@ -31,6 +32,7 @@ import com.thiga.strathbot.models.Result;
 
 import java.util.Objects;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,6 +73,9 @@ public class LoginActivity extends AppCompatActivity {
         String str_username = usernameEditText.getText().toString();
         int username = Integer.parseInt(str_username);
         String password = Objects.requireNonNull(passwordEditText.getText()).toString().trim();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("username", username);
+        jsonObject.addProperty("password", password);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApiUrl.BASE_URL)
@@ -80,13 +85,13 @@ public class LoginActivity extends AppCompatActivity {
         ApiService service = retrofit.create(ApiService.class);
 
         Log.d(TAG, service.toString());
-        Call<Result> call = service.userLogin(username, password);
+        Call<ResponseBody> call = service.userLogin(jsonObject);
 
-        call.enqueue(new Callback<Result>() {
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 assert response.body() != null;
-                if(!response.body().getError()){
+                if(response.isSuccessful()){
                     finish();
                     startActivity(new Intent(getApplicationContext(), ChatActivity.class));
                 }
@@ -96,11 +101,10 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
 //    @Override
