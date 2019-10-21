@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
 //        if (currentUser != null) {
 //            startActivity(new Intent(getApplicationContext(), MainActivity.class));
 //        } else {
-//            titleTextView.setText("Invalid login");
+//            titleTextView.setBotMessage("Invalid login");
 //        }
 //    }
 //
@@ -151,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
 //
 //                        // [START_EXCLUDE]
 //                        if (!task.isSuccessful()) {
-//                            titleTextView.setText("FAIL!");
+//                            titleTextView.setBotMessage("FAIL!");
 //                        }
 ////                        hideProgressDialog();
 //                        // [END_EXCLUDE]
@@ -162,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
 //    private boolean validateForm() {
 //        boolean valid = true;
 //
-//        String email = usernameEditText.getText().toString();
+//        String email = usernameEditText.getBotMessage().toString();
 //        if (TextUtils.isEmpty(email)) {
 //            usernameEditText.setError("Required.");
 //            valid = false;
@@ -170,7 +170,7 @@ public class LoginActivity extends AppCompatActivity {
 //            usernameEditText.setError(null);
 //        }
 //
-//        String password = passwordEditText.getText().toString();
+//        String password = passwordEditText.getBotMessage().toString();
 //        if (TextUtils.isEmpty(password)) {
 //            passwordEditText.setError("Required.");
 //            valid = false;
