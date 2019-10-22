@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,12 +25,18 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.JsonObject;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Password;
 import com.thiga.strathbot.MainActivity;
 import com.thiga.strathbot.R;
 import com.thiga.strathbot.api.ApiService;
 import com.thiga.strathbot.api.ApiUrl;
+import com.thiga.strathbot.helper.SharedPrefManager;
 import com.thiga.strathbot.models.Result;
 
+import java.util.List;
 import java.util.Objects;
 
 import okhttp3.ResponseBody;
@@ -39,17 +46,22 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements Validator.ValidationListener {
 
-    private static final String TAG = "Login";
+    private static final String TAG = "LoginTAG";
     private Context context = LoginActivity.this;
 
     private ImageView backgroundImageView;
     private ImageView logoImageView;
     private TextView titleTextView;
+
+    @NotEmpty
     private TextInputEditText usernameEditText;
+
     private TextInputEditText passwordEditText;
     private MaterialButton loginButton;
+
+    private Validator validator;
 
 //    private FirebaseAuth mAuth;
 
@@ -65,16 +77,20 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         loadImages();
 
+        validator = new Validator(this);
+        validator.setValidationListener(this);
+
         // Initialize Firebase Auth
 //        mAuth = FirebaseAuth.getInstance();
     }
 
     private void login(){
-        String str_username = usernameEditText.getText().toString();
-        int username = Integer.parseInt(str_username);
-        String password = Objects.requireNonNull(passwordEditText.getText()).toString().trim();
+        String str_username = usernameEditText.getText().toString().trim();
+        // In case I change my mind and prefer username as int
+//        int username = Integer.parseInt(str_username);
+        String password = passwordEditText.getText().toString().trim();
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("username", username);
+        jsonObject.addProperty("username", str_username);
         jsonObject.addProperty("password", password);
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -85,14 +101,16 @@ public class LoginActivity extends AppCompatActivity {
         ApiService service = retrofit.create(ApiService.class);
 
         Log.d(TAG, service.toString());
-        Call<ResponseBody> call = service.userLogin(jsonObject);
+        Call<Result> call = service.userLogin(str_username, password);
 
-        call.enqueue(new Callback<ResponseBody>() {
+        call.enqueue(new Callback<Result>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<Result> call, Response<Result> response) {
                 assert response.body() != null;
-                if(response.isSuccessful()){
+                if(!response.body().getError()){
                     finish();
+                    SharedPrefManager.getInstance(getApplicationContext()).login(response.body().getUser());
+                    Log.d("REALLYUNIQUE", response.body().toString());
                     startActivity(new Intent(getApplicationContext(), ChatActivity.class));
                 }
                 else{
@@ -101,10 +119,30 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<Result> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+//        call.enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                assert response.body() != null;
+//                if(response.isSuccessful()){
+//                    finish();
+////                    SharedPrefManager.getInstance(getApplicationContext()).login(response.body().getUser());
+//                    Log.d("REALLYUNIQUE", response.body().toString());
+//                    startActivity(new Intent(getApplicationContext(), ChatActivity.class));
+//                }
+//                else{
+//                    Toast.makeText(getApplicationContext(), "Invalid credentials", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//        });
     }
 
 //    @Override
@@ -200,8 +238,30 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        if(view == loginButton)
+        if(view == loginButton) {
+            validator.validate();
             login();
+        }
     }
 
+    @Override
+    public void onValidationSucceeded() {
+//        Toast.makeText(this, "Logged in successfully", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for(ValidationError error: errors){
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+
+            // Display error messages
+            if(view instanceof EditText){
+                ((EditText) view).setError(message);
+            }
+            else{
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }

@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.thiga.strathbot.R;
 import com.thiga.strathbot.api.ApiService;
 import com.thiga.strathbot.api.ApiUrl;
 import com.thiga.strathbot.helper.MessageListAdapter;
+import com.thiga.strathbot.helper.SharedPrefManager;
 import com.thiga.strathbot.models.Message;
 
 import java.util.ArrayList;
@@ -64,9 +66,13 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendMessage(String.valueOf(editTextChatbox.getText()));
-                receiveMessage();
             }
         });
+        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+        }
+
 //        messageRecycler.setAdapter(messageListAdapter);
 
     }
@@ -110,6 +116,7 @@ public class ChatActivity extends AppCompatActivity {
                     Log.d(TAG, response.body().toString());
                 String userMessage = String.valueOf(editTextChatbox.getText());
                 messages.add(new Message(userMessage, null, "right"));
+                receiveMessage();
 
             }
 
