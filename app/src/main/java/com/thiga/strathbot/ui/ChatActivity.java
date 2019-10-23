@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -61,13 +62,15 @@ public class ChatActivity extends AppCompatActivity {
         messageRecycler.setHasFixedSize(true);
         messageRecycler.setLayoutManager(new LinearLayoutManager(this));
         messageListAdapter = new MessageListAdapter(mContext, messages);
-        messageRecycler.setAdapter(messageListAdapter);
+
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendMessage(String.valueOf(editTextChatbox.getText()));
             }
         });
+
+        messageRecycler.setAdapter(messageListAdapter);
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
@@ -116,6 +119,8 @@ public class ChatActivity extends AppCompatActivity {
                     Log.d(TAG, response.body().toString());
                 String userMessage = String.valueOf(editTextChatbox.getText());
                 messages.add(new Message(userMessage, null, "right"));
+                messageRecycler.setAdapter(messageListAdapter);
+                editTextChatbox.setText("");
                 receiveMessage();
 
             }
@@ -143,6 +148,8 @@ public class ChatActivity extends AppCompatActivity {
                 String botMessage = response.body().get("bot_message").getAsString();
                 Log.d(TAG, response.body().get("bot_message").getAsString());
                 messages.add(new Message(null, botMessage, "left"));
+                messageRecycler.setAdapter(messageListAdapter);
+                editTextChatbox.setText("");
             }
 
             @Override
