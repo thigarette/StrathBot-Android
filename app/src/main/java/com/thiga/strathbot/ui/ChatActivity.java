@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.thiga.strathbot.api.ApiUrl;
 import com.thiga.strathbot.helper.MessageListAdapter;
 import com.thiga.strathbot.helper.SharedPrefManager;
 import com.thiga.strathbot.models.Message;
+import com.thiga.strathbot.models.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +103,7 @@ public class ChatActivity extends AppCompatActivity {
     private void sendMessage(String messageText){
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("user_message", messageText);
+        jsonObject.addProperty("user_id", SharedPrefManager.getInstance(this).getUser().getId());
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApiUrl.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())

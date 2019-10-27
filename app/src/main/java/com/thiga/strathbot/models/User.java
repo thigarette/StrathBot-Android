@@ -1,7 +1,7 @@
 package com.thiga.strathbot.models;
 
 public class User {
-    private ObjectId id;
+    private String id;
     private String email;
     private String username;
     private String password;
@@ -11,7 +11,7 @@ public class User {
 
     public User(){}
 
-    public User(ObjectId id, String email, String username, String firstName, String lastName, String mobileNumber) {
+    public User(String id, String email, String username, String firstName, String lastName, String mobileNumber) {
         this.id = id;
         this.email = email;
         this.username = username;
@@ -20,7 +20,7 @@ public class User {
         this.mobileNumber = mobileNumber;
     }
 
-    public User(ObjectId id, String email, String username, String password, String firstName, String lastName, String mobileNumber) {
+    public User(String id, String email, String username, String password, String firstName, String lastName, String mobileNumber) {
         this.id = id;
         this.email = email;
         this.username = username;
@@ -30,11 +30,11 @@ public class User {
         this.mobileNumber = mobileNumber;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 
