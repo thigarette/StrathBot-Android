@@ -23,9 +23,20 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
+    private static final int VIEW_TYPE_OPTION_BUTTON = 3;
 
     private List<Message> messageList;
     private Context mContext;
+
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mListener = listener;
+    }
 
     public MessageListAdapter(Context mContext) {
         this.mContext = mContext;
@@ -41,8 +52,10 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         Message message = messageList.get(position);
         if(message.getSide().equals("right"))
             return VIEW_TYPE_MESSAGE_SENT;
-        else
+        else if(message.getSide().equals("left"))
             return VIEW_TYPE_MESSAGE_RECEIVED;
+        else
+            return VIEW_TYPE_OPTION_BUTTON;
     }
 
     @NonNull
@@ -62,6 +75,11 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             Log.d(TAG ,"Yo where this message at?");
             return new BotMessageHolder(view);
         }
+        else if(viewType == VIEW_TYPE_OPTION_BUTTON){
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_option_button, parent, false);
+            return new OptionButtonHolder(view, mListener);
+        }
         Log.d(TAG, "That's what I thought");
         return null;
     }
@@ -75,6 +93,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
                 ((BotMessageHolder) holder).bind(message);
+                break;
+            case VIEW_TYPE_OPTION_BUTTON:
+                ((OptionButtonHolder) holder).bind(message);
         }
     }
 
@@ -115,6 +136,33 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             messageText.setText(message.getBotMessage());
         }
 
+    }
+
+    private class OptionButtonHolder extends RecyclerView.ViewHolder{
+        TextView messageText;
+        public OptionButtonHolder(View itemView, final OnItemClickListener listener) {
+            super(itemView);
+
+            messageText = itemView.findViewById(R.id.text_message_body);
+
+            Log.d("mListener", mListener.toString());
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(listener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
+        }
+
+        void bind(Message message){
+            messageText.setText(message.getOptionMessage());
+        }
     }
 
 //    public class ViewHolder extends RecyclerView.ViewHolder{

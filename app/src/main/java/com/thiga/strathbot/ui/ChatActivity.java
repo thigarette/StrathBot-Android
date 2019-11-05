@@ -6,12 +6,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -22,7 +20,6 @@ import com.thiga.strathbot.api.ApiUrl;
 import com.thiga.strathbot.helper.MessageListAdapter;
 import com.thiga.strathbot.helper.SharedPrefManager;
 import com.thiga.strathbot.models.Message;
-import com.thiga.strathbot.models.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +56,7 @@ public class ChatActivity extends AppCompatActivity {
 
         messages.add(new Message("hello", null, "right"));
         messages.add(new Message(null, "Hi! I'm Stratbot", "left"));
+        messages.add(new Message(null, null, "NOOOOO!", "center"));
 //        messageListAdapter = new MessageListAdapter(this, messages);
         messageRecycler = findViewById(R.id.recyclerview_message_list);
         messageRecycler.setHasFixedSize(true);
@@ -73,6 +71,25 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         messageRecycler.setAdapter(messageListAdapter);
+
+
+        // Click listener works but is REALLY delayed
+        messageListAdapter.setOnItemClickListener(new MessageListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Message message = messages.get(position);
+                if(message.getOptionMessage().equals("escalate")){
+                    // TODO: Retrofit call to set escalate boolean to true
+                }
+                else {
+                    // TODO: Logic
+                }
+//                messages.get(position).setOptionMessage("YAAAY!");
+//                Log.d("clicktest", "plis");
+//                messageListAdapter.notifyItemChanged(position);
+            }
+        });
+
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
@@ -103,7 +120,13 @@ public class ChatActivity extends AppCompatActivity {
     private void sendMessage(String messageText){
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("user_message", messageText);
-        jsonObject.addProperty("user_id", SharedPrefManager.getInstance(this).getUser().getId());
+
+        // Opted not to use user_id for now
+//        jsonObject.addProperty("user_id", SharedPrefManager.getInstance(this).getUser().getId());
+
+        // Using username instead
+        jsonObject.addProperty("user_username", SharedPrefManager.getInstance(this).getUser().getUsername());
+//        Log.d("wtf", jsonObject.toString());
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApiUrl.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -125,7 +148,6 @@ public class ChatActivity extends AppCompatActivity {
                 messageRecycler.setAdapter(messageListAdapter);
                 editTextChatbox.setText("");
                 receiveMessage();
-
             }
 
             @Override
@@ -151,6 +173,13 @@ public class ChatActivity extends AppCompatActivity {
                 String botMessage = response.body().get("bot_message").getAsString();
                 Log.d(TAG, response.body().get("bot_message").getAsString());
                 messages.add(new Message(null, botMessage, "left"));
+                Message last_message = messages.get(messages.size()-1);
+                if(last_message.getBotMessage().equals("Sorry I didn't quite get that. Kindly try again.")){
+                    messages.add(new Message( null,"Would you like to escalate this query to an administrator?", "left"));
+                    messageRecycler.setAdapter(messageListAdapter);
+                    messages.add(new Message(null, null, "escalate", "center"));
+                    messages.add(new Message(null, null, "no thanks", "center"));
+                }
                 messageRecycler.setAdapter(messageListAdapter);
                 editTextChatbox.setText("");
             }

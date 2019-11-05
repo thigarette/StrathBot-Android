@@ -3,8 +3,6 @@ package com.thiga.strathbot.helper;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
-import com.thiga.strathbot.models.ObjectId;
 import com.thiga.strathbot.models.User;
 
 public class SharedPrefManager {
@@ -38,11 +36,11 @@ public class SharedPrefManager {
 //        String oid = gson.toJson(user.getId());
 //        editor.putString(KEY_USER_ID, oid);
         editor.putString(KEY_USER_ID, user.getId());
-        editor.putString(KEY_USER_FIRST_NAME, user.getFirstName());
-        editor.putString(KEY_USER_LAST_NAME, user.getLastName());
+        editor.putString(KEY_USER_FIRST_NAME, user.getFirst_name());
+        editor.putString(KEY_USER_LAST_NAME, user.getLast_name());
         editor.putString(KEY_USER_USERNAME, user.getUsername());
         editor.putString(KEY_USER_EMAIL, user.getEmail());
-        editor.putString(KEY_USER_MOBILE_NUMBER, user.getMobileNumber());
+        editor.putString(KEY_USER_MOBILE_NUMBER, user.getMobile_number());
         editor.apply();
         return true;
     }
@@ -61,12 +59,12 @@ public class SharedPrefManager {
 //        ObjectId objectId = gson.fromJson(json, ObjectId.class);
         return new User(
 //                objectId,
-                sharedPreferences.getString(KEY_USER_ID, null),
-                sharedPreferences.getString(KEY_USER_FIRST_NAME,null),
-                sharedPreferences.getString(KEY_USER_LAST_NAME,null),
                 sharedPreferences.getString(KEY_USER_USERNAME,null),
                 sharedPreferences.getString(KEY_USER_EMAIL,null),
-                sharedPreferences.getString(KEY_USER_MOBILE_NUMBER,null)
+                sharedPreferences.getString(KEY_USER_FIRST_NAME,null),
+                sharedPreferences.getString(KEY_USER_LAST_NAME,null),
+                sharedPreferences.getString(KEY_USER_MOBILE_NUMBER,null),
+                sharedPreferences.getString(KEY_USER_ID, null)
                 );
     }
 

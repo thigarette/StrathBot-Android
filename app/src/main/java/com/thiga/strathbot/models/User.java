@@ -1,34 +1,35 @@
 package com.thiga.strathbot.models;
 
 public class User {
-    private String id;
-    private String email;
     private String username;
     private String password;
-    private String firstName;
-    private String lastName;
-    private String mobileNumber;
+    private String email;
+    private String first_name;
+    private String last_name;
+    private String mobile_number;
+    private String id;
 
-    public User(){}
 
-    public User(String id, String email, String username, String firstName, String lastName, String mobileNumber) {
-        this.id = id;
-        this.email = email;
+//    public User(){}
+
+    public User(String username, String email, String first_name, String last_name, String mobile_number, String id) {
         this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.mobileNumber = mobileNumber;
+        this.email = email;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.mobile_number = mobile_number;
+        this.id = id;
     }
 
-    public User(String id, String email, String username, String password, String firstName, String lastName, String mobileNumber) {
-        this.id = id;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.mobileNumber = mobileNumber;
-    }
+//    public User(String username, String password, String email, String first_name, String last_name, String mobile_number, String id) {
+//        this.username = username;
+//        this.password = password;
+//        this.email = email;
+//        this.first_name = first_name;
+//        this.last_name = last_name;
+//        this.mobile_number = mobile_number;
+//        this.id = id;
+//    }
 
     public String getId() {
         return id;
@@ -62,27 +63,27 @@ public class User {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
-    public String getMobileNumber() {
-        return mobileNumber;
+    public String getMobile_number() {
+        return mobile_number;
     }
 
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
+    public void setMobile_number(String mobile_number) {
+        this.mobile_number = mobile_number;
     }
 }

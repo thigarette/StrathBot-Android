@@ -4,6 +4,7 @@ public class Message {
     private String id;
     private String userMessage;
     private String botMessage;
+    private String optionMessage;
     private String side;
 
     public Message() {
@@ -24,6 +25,13 @@ public class Message {
     public Message(String userMessage, String botMessage, String side) {
         this.userMessage = userMessage;
         this.botMessage = botMessage;
+        this.side = side;
+    }
+
+    public Message(String userMessage, String botMessage, String optionMessage, String side) {
+        this.userMessage = userMessage;
+        this.botMessage = botMessage;
+        this.optionMessage = optionMessage;
         this.side = side;
     }
 
@@ -57,5 +65,13 @@ public class Message {
 
     public void setSide(String side) {
         this.side = side;
+    }
+
+    public String getOptionMessage() {
+        return optionMessage;
+    }
+
+    public void setOptionMessage(String optionMessage) {
+        this.optionMessage = optionMessage;
     }
 }
