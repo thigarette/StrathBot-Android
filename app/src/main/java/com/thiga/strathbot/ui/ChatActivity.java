@@ -79,10 +79,11 @@ public class ChatActivity extends AppCompatActivity {
             public void onItemClick(int position) {
                 Message message = messages.get(position);
                 if(message.getOptionMessage().equals("escalate")){
-                    // TODO: Retrofit call to set escalate boolean to true
+                    escalate();
                 }
-                else {
-                    // TODO: Logic
+                else if(message.getOptionMessage().equals("no thanks")) {
+                    messages.add(new Message(null, "Alright. Anything else I can help you with? Feel free to ask.", "left"));
+                    messageRecycler.setAdapter(messageListAdapter);
                 }
 //                messages.get(position).setOptionMessage("YAAAY!");
 //                Log.d("clicktest", "plis");
@@ -176,7 +177,6 @@ public class ChatActivity extends AppCompatActivity {
                 Message last_message = messages.get(messages.size()-1);
                 if(last_message.getBotMessage().equals("Sorry I didn't quite get that. Kindly try again.")){
                     messages.add(new Message( null,"Would you like to escalate this query to an administrator?", "left"));
-                    messageRecycler.setAdapter(messageListAdapter);
                     messages.add(new Message(null, null, "escalate", "center"));
                     messages.add(new Message(null, null, "no thanks", "center"));
                 }
@@ -200,5 +200,35 @@ public class ChatActivity extends AppCompatActivity {
 //
 //            }
 //        });
+    }
+    private void escalate(){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("user_username", SharedPrefManager.getInstance(this).getUser().getUsername());
+        jsonObject.addProperty("escalated", true);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiUrl.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiService service = retrofit.create(ApiService.class);
+
+        Call<ResponseBody> call = service.escalate(
+                jsonObject
+        );
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                messages.add(
+                        new Message(null, "Your query has been escalated to an administrator and will be answered soon.", "left")
+                );
+                messageRecycler.setAdapter(messageListAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(mContext, "Error connecting to StrathBot. Try again.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

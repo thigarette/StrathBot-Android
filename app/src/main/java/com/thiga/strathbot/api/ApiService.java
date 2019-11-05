@@ -36,4 +36,10 @@ public interface ApiService {
 
     @GET("/")
     Call<JsonObject> getMessage();
+
+    @Headers("Content-type: application/json")
+    @POST("/escalate")
+    Call<ResponseBody> escalate(
+            @Body JsonObject body
+    );
 }
