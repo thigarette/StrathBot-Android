@@ -5,6 +5,7 @@ public class Message {
     private String userMessage;
     private String botMessage;
     private String optionMessage;
+    private String gifUrl;
     private String side;
 
     public Message() {
@@ -32,6 +33,14 @@ public class Message {
         this.userMessage = userMessage;
         this.botMessage = botMessage;
         this.optionMessage = optionMessage;
+        this.side = side;
+    }
+
+    public Message(String userMessage, String botMessage, String optionMessage, String gifUrl, String side) {
+        this.userMessage = userMessage;
+        this.botMessage = botMessage;
+        this.optionMessage = optionMessage;
+        this.gifUrl = gifUrl;
         this.side = side;
     }
 
@@ -73,5 +82,13 @@ public class Message {
 
     public void setOptionMessage(String optionMessage) {
         this.optionMessage = optionMessage;
+    }
+
+    public String getGifUrl() {
+        return gifUrl;
+    }
+
+    public void setGifUrl(String gifUrl) {
+        this.gifUrl = gifUrl;
     }
 }

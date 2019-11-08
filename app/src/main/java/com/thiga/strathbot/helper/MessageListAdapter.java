@@ -5,11 +5,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.material.button.MaterialButton;
 import com.thiga.strathbot.R;
 import com.thiga.strathbot.models.Message;
 
@@ -24,6 +27,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
     private static final int VIEW_TYPE_OPTION_BUTTON = 3;
+    private static final int VIEW_TYPE_GIF_IMAGE = 4;
 
     private List<Message> messageList;
     private Context mContext;
@@ -54,8 +58,10 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             return VIEW_TYPE_MESSAGE_SENT;
         else if(message.getSide().equals("left"))
             return VIEW_TYPE_MESSAGE_RECEIVED;
-        else
+        else if(message.getSide().equals("center"))
             return VIEW_TYPE_OPTION_BUTTON;
+        else
+            return VIEW_TYPE_GIF_IMAGE;
     }
 
     @NonNull
@@ -80,6 +86,11 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                     .inflate(R.layout.item_option_button, parent, false);
             return new OptionButtonHolder(view, mListener);
         }
+        else if(viewType == VIEW_TYPE_GIF_IMAGE){
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_gif, parent, false);
+            return new GifHolder(view);
+        }
         Log.d(TAG, "That's what I thought");
         return null;
     }
@@ -96,6 +107,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_OPTION_BUTTON:
                 ((OptionButtonHolder) holder).bind(message);
+                break;
+            case VIEW_TYPE_GIF_IMAGE:
+                ((GifHolder) holder).bind(message);
         }
     }
 
@@ -139,7 +153,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     }
 
     private class OptionButtonHolder extends RecyclerView.ViewHolder{
-        TextView messageText;
+        MaterialButton messageText;
         public OptionButtonHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
 
@@ -147,7 +161,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             Log.d("mListener", mListener.toString());
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            messageText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(listener != null){
@@ -162,6 +176,22 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
         void bind(Message message){
             messageText.setText(message.getOptionMessage());
+        }
+    }
+
+    private class GifHolder extends RecyclerView.ViewHolder{
+
+        ImageView gif;
+        public GifHolder(View itemView) {
+            super(itemView);
+
+            gif = itemView.findViewById(R.id.gif);
+        }
+        void bind(Message message){
+            Glide
+                    .with(mContext)
+                    .load(message.getGifUrl())
+                    .into(gif);
         }
     }
 

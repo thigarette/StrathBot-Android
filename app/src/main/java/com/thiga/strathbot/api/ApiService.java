@@ -30,7 +30,7 @@ public interface ApiService {
 
     @Headers("Content-type: application/json")
     @POST("/")
-    Call<ResponseBody> sendMessage(
+    Call<JsonObject> sendMessage(
             @Body JsonObject body
     );
 
