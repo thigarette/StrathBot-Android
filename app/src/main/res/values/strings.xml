@@ -14,4 +14,5 @@
     <string name="base_url">http://192.168.43.194:5000/</string>
     <string name="enter_message">Enter message</string>
     <string name="send">send</string>
+    <string name="logout">Logout</string>
 </resources>

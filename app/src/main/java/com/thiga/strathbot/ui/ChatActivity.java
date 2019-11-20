@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -106,6 +108,20 @@ public class ChatActivity extends AppCompatActivity {
 
 //        messageRecycler.setAdapter(messageListAdapter);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.logout){
+            logout();
+        }
+        return true;
     }
 
     @Override
@@ -275,5 +291,11 @@ public class ChatActivity extends AppCompatActivity {
                 Toast.makeText(mContext, "Error connecting to StrathBot. Try again.", Toast.LENGTH_LONG).show();
             }
         });
+    }
+    private void logout(){
+        SharedPrefManager.getInstance(this).logout();
+        finish();
+        startActivity(new Intent(this, LoginActivity.class));
+
     }
 }
