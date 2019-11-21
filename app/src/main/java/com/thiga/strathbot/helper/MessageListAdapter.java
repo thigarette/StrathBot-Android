@@ -18,6 +18,7 @@ import com.thiga.strathbot.models.Message;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
 import java.util.List;
 
 public class MessageListAdapter extends RecyclerView.Adapter {
@@ -125,29 +126,35 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     }
 
     private class UserMessageHolder extends RecyclerView.ViewHolder {
-        TextView messageText;
+        TextView messageText, timeText;
 
         public UserMessageHolder(View view) {
             super(view);
 
             messageText = view.findViewById(R.id.text_message_body);
+            timeText = view.findViewById(R.id.text_message_time);
         }
 
         void bind(Message message){
             messageText.setText(message.getUserMessage());
+            DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
+            timeText.setText(dateFormat.format(message.getCurrentTime()));
         }
     }
 
     private class BotMessageHolder extends RecyclerView.ViewHolder {
-        TextView messageText;
+        TextView messageText, timeText;
         public BotMessageHolder(View view) {
             super(view);
 
             messageText = view.findViewById(R.id.text_message_body);
+            timeText = view.findViewById(R.id.text_message_time);
         }
 
         void bind(Message message){
             messageText.setText(message.getBotMessage());
+            DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
+            timeText.setText(dateFormat.format(message.getCurrentTime()));
         }
 
     }

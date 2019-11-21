@@ -24,6 +24,8 @@ import com.thiga.strathbot.helper.SharedPrefManager;
 import com.thiga.strathbot.models.Message;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -57,8 +59,8 @@ public class ChatActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.button_chatbox_send);
         editTextChatbox = findViewById(R.id.edit_text_chatbox);
 
-        messages.add(new Message("hello", null, "right"));
-        messages.add(new Message(null, "Hi! I'm Stratbot", "left"));
+        messages.add(new Message("hello", null, "right", Calendar.getInstance().getTime()));
+        messages.add(new Message(null, "Hi! I'm Stratbot", "left", Calendar.getInstance().getTime()));
         messages.add(new Message(null, null, "NOOOOO!", "center"));
         messages.add(new Message(null, null, null, "https://media.giphy.com/media/iI54Q04tvKQA3Nv8O7/giphy.gif", "left_gif"));
         messageListAdapter = new MessageListAdapter(this, messages);
@@ -91,9 +93,9 @@ public class ChatActivity extends AppCompatActivity {
                     messages.remove(messages.size()-1);
 
                     // Present the option that user chose as a user message
-                    messages.add(new Message("No thanks", null, "right"));
+                    messages.add(new Message("No thanks", null, "right", Calendar.getInstance().getTime()));
 
-                    messages.add(new Message(null, "Alright. Anything else I can help you with? Feel free to ask.", "left"));
+                    messages.add(new Message(null, "Alright. Anything else I can help you with? Feel free to ask.", "left", Calendar.getInstance().getTime()));
                     messageRecycler.setAdapter(messageListAdapter);
                     messageRecycler.scrollToPosition(messages.size()-1);
                 }
@@ -145,8 +147,9 @@ public class ChatActivity extends AppCompatActivity {
     private void sendMessage(String messageText){
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("user_message", messageText);
+        jsonObject.addProperty("timestamp", Calendar.getInstance().getTime().getTime());
 
-        // Opted not to use user_id for now
+        // Opted not to use user_id for currentTime
 //        jsonObject.addProperty("user_id", SharedPrefManager.getInstance(this).getUser().getId());
 
         // Using username instead
@@ -168,7 +171,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 Log.d(TAG+" post response", response.body().toString());
                 String userMessage = String.valueOf(editTextChatbox.getText());
-                messages.add(new Message(userMessage, null, "right"));
+                messages.add(new Message(userMessage, null, "right", Calendar.getInstance().getTime()));
                 messageRecycler.setAdapter(messageListAdapter);
                 messageRecycler.scrollToPosition(messages.size()-1);
                 editTextChatbox.setText("");
@@ -236,7 +239,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private void receiveMessage(JsonObject jsonObject){
         String botMessage = jsonObject.get("bot_message").getAsString();
-        messages.add(new Message(null, botMessage, "left"));
+        Date currentTime = Calendar.getInstance().getTime();
+        messages.add(new Message(null, botMessage, "left", currentTime));
         if(jsonObject.has("gif_url")){
             String gifUrl = jsonObject.get("gif_url").getAsString();
             messages.add(new Message(null, null, null, gifUrl, "left_gif"));
@@ -244,7 +248,7 @@ public class ChatActivity extends AppCompatActivity {
         Message last_message = messages.get(messages.size()-1);
         try {
             if (last_message.getBotMessage().equals("Sorry I didn't quite get that. Kindly try again.")) {
-                messages.add(new Message(null, "Would you like to escalate this query to an administrator?", "left"));
+                messages.add(new Message(null, "Would you like to escalate this query to an administrator?", "left", currentTime));
                 messages.add(new Message(null, null, "escalate", "center"));
                 messages.add(new Message(null, null, "no thanks", "center"));
             }
@@ -277,10 +281,10 @@ public class ChatActivity extends AppCompatActivity {
                 //Remove no thanks button
                 messages.remove(messages.size()-1);
 
-                messages.add(new Message("Escalate", null, "right"));
+                messages.add(new Message("Escalate", null, "right", Calendar.getInstance().getTime()));
 
                 messages.add(
-                        new Message(null, "Your query has been escalated to an administrator and will be answered soon.", "left")
+                        new Message(null, "Your query has been escalated to an administrator and will be answered soon.", "left", Calendar.getInstance().getTime())
                 );
                 messageRecycler.setAdapter(messageListAdapter);
                 messageRecycler.scrollToPosition(messages.size()-1);

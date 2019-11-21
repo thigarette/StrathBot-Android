@@ -1,5 +1,7 @@
 package com.thiga.strathbot.models;
 
+import java.util.Date;
+
 public class Message {
     private String id;
     private String userMessage;
@@ -7,6 +9,7 @@ public class Message {
     private String optionMessage;
     private String gifUrl;
     private String side;
+    private Date currentTime;
 
     public Message() {
     }
@@ -29,6 +32,13 @@ public class Message {
         this.side = side;
     }
 
+    public Message(String userMessage, String botMessage, String side, Date currentTime) {
+        this.userMessage = userMessage;
+        this.botMessage = botMessage;
+        this.side = side;
+        this.currentTime = currentTime;
+    }
+
     public Message(String userMessage, String botMessage, String optionMessage, String side) {
         this.userMessage = userMessage;
         this.botMessage = botMessage;
@@ -42,6 +52,15 @@ public class Message {
         this.optionMessage = optionMessage;
         this.gifUrl = gifUrl;
         this.side = side;
+    }
+
+    public Message(String userMessage, String botMessage, String optionMessage, String gifUrl, String side, Date currentTime) {
+        this.userMessage = userMessage;
+        this.botMessage = botMessage;
+        this.optionMessage = optionMessage;
+        this.gifUrl = gifUrl;
+        this.side = side;
+        this.currentTime = currentTime;
     }
 
     public String getId() {
@@ -90,5 +109,13 @@ public class Message {
 
     public void setGifUrl(String gifUrl) {
         this.gifUrl = gifUrl;
+    }
+
+    public Date getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(Date currentTime) {
+        this.currentTime = currentTime;
     }
 }
