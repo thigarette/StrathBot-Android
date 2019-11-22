@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "230946816010-tva7noljrjve5b4akj3dc3o3ruhjos8s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thiga.strathbot",
+            "certificate_hash": "83c7f8ae97f9f8e3e437b3ab9dbb7fca3ccb41b7"
+          }
+        },
+        {
           "client_id": "230946816010-abclo955iev4e3rv76flii77o393kmqu.apps.googleusercontent.com",
           "client_type": 3
         }

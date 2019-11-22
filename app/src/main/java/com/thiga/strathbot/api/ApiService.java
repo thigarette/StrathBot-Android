@@ -42,4 +42,10 @@ public interface ApiService {
     Call<ResponseBody> escalate(
             @Body JsonObject body
     );
+
+    @Headers("Content-type: application/json")
+    @POST("/token")
+    Call<ResponseBody> sendToken(
+            @Body JsonObject body
+    );
 }

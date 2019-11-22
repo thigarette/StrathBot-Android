@@ -15,4 +15,5 @@
     <string name="enter_message">Enter message</string>
     <string name="send">send</string>
     <string name="logout">Logout</string>
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 </resources>
