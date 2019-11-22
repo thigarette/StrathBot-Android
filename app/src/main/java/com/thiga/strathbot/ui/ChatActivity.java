@@ -4,13 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -28,6 +31,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,8 +65,8 @@ public class ChatActivity extends AppCompatActivity {
 
         messages.add(new Message("hello", null, "right", Calendar.getInstance().getTime()));
         messages.add(new Message(null, "Hi! I'm Stratbot", "left", Calendar.getInstance().getTime()));
-        messages.add(new Message(null, null, "NOOOOO!", "center"));
-        messages.add(new Message(null, null, null, "https://media.giphy.com/media/iI54Q04tvKQA3Nv8O7/giphy.gif", "left_gif"));
+//        messages.add(new Message(null, null, "NOOOOO!", "center"));
+//        messages.add(new Message(null, null, null, "https://media.giphy.com/media/iI54Q04tvKQA3Nv8O7/giphy.gif", "left_gif"));
         messageListAdapter = new MessageListAdapter(this, messages);
         messageRecycler = findViewById(R.id.recyclerview_message_list);
         messageRecycler.setHasFixedSize(true);
@@ -73,6 +77,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sendMessage(String.valueOf(editTextChatbox.getText()));
+                hideKeyboard(ChatActivity.this);
             }
         });
 
@@ -242,8 +247,16 @@ public class ChatActivity extends AppCompatActivity {
         Date currentTime = Calendar.getInstance().getTime();
         messages.add(new Message(null, botMessage, "left", currentTime));
         if(jsonObject.has("gif_url")){
-            String gifUrl = jsonObject.get("gif_url").getAsString();
-            messages.add(new Message(null, null, null, gifUrl, "left_gif"));
+            final String gifUrl = jsonObject.get("gif_url").getAsString();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    messages.add(new Message(null, null, null, gifUrl, "left_gif"));
+                    messageListAdapter.notifyDataSetChanged();
+                }
+            }, 5000);
+//            messages.add(new Message(null, null, null, gifUrl, "left_gif"));
         }
         Message last_message = messages.get(messages.size()-1);
         try {
@@ -301,5 +314,14 @@ public class ChatActivity extends AppCompatActivity {
         finish();
         startActivity(new Intent(this, LoginActivity.class));
 
+    }
+
+    public static void hideKeyboard(Activity activity){
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = activity.getCurrentFocus();
+        if(view == null){
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

@@ -7,11 +7,17 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="AppTheme.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
     <style name="AppTheme.InputField.OnDark" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="android:textColorHint">@color/white</item>
         <item name="passwordToggleTint">@color/colorAccent</item>
-        <item name="boxBackgroundColor">#A9A9A9</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="boxBackgroundColor">#2C2C2C</item>
+        <item name="hintTextColor">@color/white</item>
     </style>
     <style name="AppTheme.Button.Gold" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/colorAccent</item>
