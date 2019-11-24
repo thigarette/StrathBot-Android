@@ -71,8 +71,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_message)
                 .setContentTitle(title)
-                .setContentText(body)
-                .setContentInfo("Info");
+                .setContentText("Test")
+                .setContentInfo("Info")
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(body));
 
         notificationManager.notify(new Random().nextInt(), notificationBuilder.build());
     }
