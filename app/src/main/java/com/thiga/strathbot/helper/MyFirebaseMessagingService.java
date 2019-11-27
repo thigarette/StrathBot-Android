@@ -71,7 +71,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_message)
                 .setContentTitle(title)
-                .setContentText("Test")
+                .setContentText("Escalated Query")
                 .setContentInfo("Info")
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body));
 

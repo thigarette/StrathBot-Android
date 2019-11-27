@@ -68,8 +68,8 @@ public class ChatActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.button_chatbox_send);
         editTextChatbox = findViewById(R.id.edit_text_chatbox);
 
-        messages.add(new Message("hello", null, "right", Calendar.getInstance().getTime()));
-        messages.add(new Message(null, "Hi! I'm Stratbot", "left", Calendar.getInstance().getTime()));
+//        messages.add(new Message("hello", null, "right", Calendar.getInstance().getTime()));
+        messages.add(new Message(null, "Hi! I'm Stratbot. You're personal assistant for Strathmore University related questions. Ask me a question and I'll do my best to answer it.", "left", Calendar.getInstance().getTime()));
 //        messages.add(new Message(null, null, "NOOOOO!", "center"));
 //        messages.add(new Message(null, null, null, "https://media.giphy.com/media/iI54Q04tvKQA3Nv8O7/giphy.gif", "left_gif"));
         messageListAdapter = new MessageListAdapter(this, messages);
@@ -345,7 +345,7 @@ public class ChatActivity extends AppCompatActivity {
 
                         String msg = getString(R.string.msg_token_fmt, token);
                         Log.d(TAG, msg);
-                        Toast.makeText(ChatActivity.this, msg, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(ChatActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
