@@ -1,3 +1,7 @@
 # Screenshots
-### Splash Screen
-<img src="https://i.imgur.com/E5fHZXN.png" width="300">
+
+<img src="screenies/strathbot_screenies.png"/>
+
+
+
+
